@@ -1,0 +1,1078 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brand Landing Page Audit & Strategic Conversion Blueprint</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            600: '#16a34a',
+                            700: '#15803d',
+                            800: '#166534',
+                            900: '#14532d',
+                        },
+                        tech: {
+                            50: '#f8fafc',
+                            100: '#f1f5f9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            800: '#075985',
+                            900: '#0f172a',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom chart container styling for responsive rendering */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 650px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 320px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 360px;
+            }
+        }
+        /* Custom scrollbar for inner panes */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        /* Sensitive Content Redaction Style */
+        .sensitive-redaction {
+            filter: blur(4px);
+            opacity: 0.5;
+            user-select: none;
+            pointer-events: none;
+            display: inline-block;
+            background-color: #cbd5e1;
+            color: transparent;
+            border-radius: 2px;
+        }
+        .redact-label {
+            font-weight: bold;
+            color: #64748b;
+            font-size: 0.85em;
+            background: #f1f5f9;
+            padding: 2px 6px;
+            border-radius: 4px;
+            border: 1px dashed #cbd5e1;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased min-h-screen flex flex-col">
+
+    <!-- Top Navigation Header -->
+    <header class="bg-slate-900 text-white sticky top-0 z-50 shadow-md border-b border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="bg-emerald-500 text-slate-900 font-bold text-lg px-2.5 py-1 rounded">BT</div>
+                <span class="font-bold text-lg tracking-tight text-slate-100">[ BRAND ] <span class="text-emerald-400 font-normal text-sm sm:inline hidden">| Audit & Strategic Conversion Blueprint</span></span>
+            </div>
+            <!-- Desktop Navigation Tabs -->
+            <nav class="hidden md:flex space-x-1 lg:space-x-2 text-sm font-medium" id="main-nav">
+                <button onclick="switchTab('exec-summary')" id="nav-exec-summary" class="nav-btn px-3 py-2 rounded-md bg-emerald-700 text-white">Overview</button>
+                <button onclick="switchTab('audience-intent')" id="nav-audience-intent" class="nav-btn px-3 py-2 rounded-md text-slate-300 hover:text-white hover:bg-slate-800">Audience & Intent</button>
+                <button onclick="switchTab('page-audit')" id="nav-page-audit" class="nav-btn px-3 py-2 rounded-md text-slate-300 hover:text-white hover:bg-slate-800">16-Point Audit</button>
+                <button onclick="switchTab('competitors')" id="nav-competitors" class="nav-btn px-3 py-2 rounded-md text-slate-300 hover:text-white hover:bg-slate-800">Competitor Matrix</button>
+                <button onclick="switchTab('proposed-ia')" id="nav-proposed-ia" class="nav-btn px-3 py-2 rounded-md text-slate-300 hover:text-white hover:bg-slate-800">Proposed Wireframe</button>
+                <button onclick="switchTab('action-plan')" id="nav-action-plan" class="nav-btn px-3 py-2 rounded-md text-slate-300 hover:text-white hover:bg-slate-800">Action Strategy</button>
+            </nav>
+            <!-- Mobile Menu Toggle Button -->
+            <div class="md:hidden">
+                <button onclick="toggleMobileMenu()" class="text-slate-300 hover:text-white p-2 focus:outline-none">
+                    <span class="text-xl">☰</span>
+                </button>
+            </div>
+        </div>
+        <!-- Mobile Dropdown Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-slate-800 px-4 pt-2 pb-4 space-y-2 text-sm border-t border-slate-700">
+            <button onclick="switchTab('exec-summary'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 rounded text-white bg-emerald-600">Overview</button>
+            <button onclick="switchTab('audience-intent'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 rounded text-slate-300 hover:bg-slate-700">Audience & Intent</button>
+            <button onclick="switchTab('page-audit'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 rounded text-slate-300 hover:bg-slate-700">16-Point Audit</button>
+            <button onclick="switchTab('competitors'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 rounded text-slate-300 hover:bg-slate-700">Competitor Matrix</button>
+            <button onclick="switchTab('proposed-ia'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 rounded text-slate-300 hover:bg-slate-700">Proposed Wireframe</button>
+            <button onclick="switchTab('action-plan'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 rounded text-slate-300 hover:bg-slate-700">Action Strategy</button>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+
+        <!-- SECTION 1: EXECUTIVE OVERVIEW -->
+        <section id="tab-exec-summary" class="tab-content space-y-6">
+            <!-- Intro Paragraph -->
+            <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                <div class="flex items-center space-x-3 mb-2">
+                    <span class="bg-emerald-100 text-emerald-800 text-xs font-semibold px-2.5 py-0.5 rounded">CASE STUDY ANALYSIS</span>
+                    <span class="text-slate-500 text-sm">Target Domain: Indian Bioinformatics & Biotech Career Intelligence</span>
+                </div>
+                <h1 class="text-2xl sm:text-3xl font-bold text-slate-900 mb-3">[ BRAND ] Landing Page Audit & Strategic Conversion Blueprint</h1>
+                <p class="text-slate-600 leading-relaxed text-sm sm:text-base">
+                    This interactive dashboard synthesizes a deep, evidence-based landing page audit and strategic conversion blueprint for [ BRAND ]. Anchored in the rapid macroeconomic growth of the Indian bioeconomy ($195.3B in 2025) and national initiatives like GenomeIndia, this analysis diagnoses why the current third-party checkout setup creates severe friction for analytical life science professionals—and outlines how to build an authoritative, standalone conversion hub[cite: 1].
+                </p>
+            </div>
+
+            <!-- Key Metric Cards Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm border-l-4 border-l-emerald-500">
+                    <div class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Indian Bioeconomy Valuation</div>
+                    <div class="text-2xl font-extrabold text-slate-900">$195.3 Billion</div>
+                    <div class="text-xs text-emerald-600 font-medium mt-1">↑ 18% YoY Growth (2025-2026 Target: $300B)</div>
+                </div>
+                <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm border-l-4 border-l-sky-500">
+                    <div class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">GenomeIndia Impact</div>
+                    <div class="text-2xl font-extrabold text-slate-900">10,000 Genomes</div>
+                    <div class="text-xs text-slate-600 mt-1">44 Million unique variants drive dry-lab demand</div>
+                </div>
+                <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm border-l-4 border-l-amber-500">
+                    <div class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Core Product Pricing</div>
+                    <div class="text-2xl font-extrabold text-slate-900"><span class="redact-label">[ PUBLIC PRICING ]</span></div>
+                    <div class="text-xs text-slate-600 mt-1">Bioinformatics Portfolio Blueprint</div>
+                </div>
+                <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm border-l-4 border-l-red-500">
+                    <div class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Current Architecture Blocker</div>
+                    <div class="text-2xl font-extrabold text-red-600">0% Domain Control</div>
+                    <div class="text-xs text-slate-600 mt-1">Hosted on third-party link</div>
+                </div>
+            </div>
+
+            <!-- Macro Context Chart & Executive Summary Split -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <!-- Visualizing the Market & Skill Bottleneck -->
+                <div class="lg:col-span-7 bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <h2 class="text-lg font-bold text-slate-900 mb-1">Macroeconomic Bioeconomy Growth vs Talent Bottleneck</h2>
+                        <p class="text-xs text-slate-500 mb-4">Tracking Indian Biotech Market Size ($B) alongside the widening practical skills gap in dry-lab roles.</p>
+                        <div class="chart-container">
+                            <canvas id="bioeconomyChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="mt-4 p-3 bg-slate-50 rounded-lg text-xs text-slate-600 border border-slate-200">
+                        <strong class="text-slate-800">Insight:</strong> While hiring demand in top firms is surging, standard academic certifications produce graduates with <span class="sensitive-redaction">internal assessment data redacted</span>.
+                    </div>
+                </div>
+
+                <!-- 4 Executive Pillars -->
+                <div class="lg:col-span-5 bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <h2 class="text-lg font-bold text-slate-900 mb-3">Executive Summary Audit Pillars</h2>
+                        <div class="space-y-3">
+                            <div class="p-3 bg-emerald-50 border border-emerald-200 rounded-lg">
+                                <div class="text-xs font-bold text-emerald-900 uppercase">1. Biggest Strength</div>
+                                <div class="text-xs text-emerald-800 mt-1 font-medium">Laser-focused diagnosis of the "Certification Trap." Identifies that students lack portfolio execution, not coding tutorials.</div>
+                            </div>
+                            <div class="p-3 bg-red-50 border border-red-200 rounded-lg">
+                                <div class="text-xs font-bold text-red-900 uppercase">2. Biggest Weakness</div>
+                                <div class="text-xs text-red-800 mt-1 font-medium">Complete reliance on third-party checkout subdomain which destroys scientific trust and SEO indexing.</div>
+                            </div>
+                            <div class="p-3 bg-amber-50 border border-amber-200 rounded-lg">
+                                <div class="text-xs font-bold text-amber-900 uppercase">3. Audience Mismatch</div>
+                                <div class="text-xs text-amber-800 mt-1 font-medium">Analytical biologists require methodological transparency, author credentials, and peer proof before making purchase decisions.</div>
+                            </div>
+                            <div class="p-3 bg-sky-50 border border-sky-200 rounded-lg">
+                                <div class="text-xs font-bold text-sky-900 uppercase">4. Core Opportunity</div>
+                                <div class="text-xs text-sky-800 mt-1 font-medium">Build a dedicated standalone hub that leverages <span class="redact-label">[ FOUNDER CREDENTIALS REDACTED ]</span> and <span class="redact-label">[ COMMUNITY PROOF REDACTED ]</span>.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-slate-200">
+                        <button onclick="switchTab('page-audit')" class="w-full py-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold rounded text-center transition">
+                            Explore Full 16-Point Section Audit →
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: TARGET AUDIENCE & SEARCH INTENT -->
+        <section id="tab-audience-intent" class="tab-content hidden space-y-6">
+            <!-- Intro Paragraph -->
+            <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                <h2 class="text-xl font-bold text-slate-900 mb-2">Target Audience Research & Search Intent Gap</h2>
+                <p class="text-slate-600 text-sm leading-relaxed">
+                    Bioinformatics professionals fall into three distinct behavioral segments. Biologists operate under strict scientific paradigms; they require rigorous methodological validation. Below is an interactive analysis of the target audience segments, their competency gaps mapped against the ISCB (International Society for Computational Biology) framework, and how the current landing page fails their intent[cite: 1].
+                </p>
+            </div>
+
+            <!-- Segment Selector Tabs -->
+            <div class="flex flex-wrap gap-2 border-b border-slate-200 pb-3">
+                <button onclick="showSegment('wet-lab')" id="btn-seg-wet-lab" class="segment-btn px-4 py-2 text-xs sm:text-sm font-semibold rounded-lg bg-emerald-600 text-white shadow-sm">
+                    Segment 1: Transitioning Wet-Lab Biologist
+                </button>
+                <button onclick="showSegment('certificate')" id="btn-seg-certificate" class="segment-btn px-4 py-2 text-xs sm:text-sm font-semibold rounded-lg bg-white text-slate-700 border border-slate-300 hover:bg-slate-100">
+                    Segment 2: Certificate Collector Graduate
+                </button>
+                <button onclick="showSegment('ai-curious')" id="btn-seg-ai-curious" class="segment-btn px-4 py-2 text-xs sm:text-sm font-semibold rounded-lg bg-white text-slate-700 border border-slate-300 hover:bg-slate-100">
+                    Segment 3: AI-Curious Researcher
+                </button>
+            </div>
+
+            <!-- Segment Detail Cards (Dynamic JS Switch) -->
+            <div id="segment-display-area" class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                <!-- Content inserted dynamically by JS -->
+            </div>
+
+            <!-- ISCB Competencies Radar Chart & Search Intent Matrix -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <!-- Radar Chart -->
+                <div class="lg:col-span-5 bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                    <h3 class="text-md font-bold text-slate-900 mb-1">ISCB Core Competency Gap Analysis</h3>
+                    <p class="text-xs text-slate-500 mb-4">Comparing target audience entry skills vs industry requirements for dry-lab roles.</p>
+                    <div class="chart-container">
+                        <canvas id="iscbRadarChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Intent Fulfillment Table -->
+                <div class="lg:col-span-7 bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-md font-bold text-slate-900 mb-3">Search & User Intent Fulfillment Matrix</h3>
+                        <div class="overflow-x-auto custom-scrollbar">
+                            <table class="w-full text-left text-xs text-slate-600">
+                                <thead class="bg-slate-100 text-slate-700 font-bold uppercase tracking-wider">
+                                    <tr>
+                                        <th class="p-2.5">Intent Category</th>
+                                        <th class="p-2.5">User Mindset & Search Signal</th>
+                                        <th class="p-2.5">Current Fulfillment</th>
+                                        <th class="p-2.5">Gap Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-slate-200">
+                                    <tr>
+                                        <td class="p-2.5 font-semibold text-slate-800">Informational</td>
+                                        <td class="p-2.5 font-mono"><span class="redact-label">[ SEARCH QUERY REDACTED ]</span></td>
+                                        <td class="p-2.5 text-red-600 font-semibold">Poor (0 free articles)</td>
+                                        <td class="p-2.5"><span class="bg-red-100 text-red-800 px-2 py-0.5 rounded font-bold">Critical</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="p-2.5 font-semibold text-slate-800">Career</td>
+                                        <td class="p-2.5 font-mono"><span class="redact-label">[ SEARCH QUERY REDACTED ]</span></td>
+                                        <td class="p-2.5 text-emerald-600 font-semibold">Strong (Direct copy)</td>
+                                        <td class="p-2.5"><span class="bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded font-bold">Matched</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="p-2.5 font-semibold text-slate-800">Tool / Pipeline</td>
+                                        <td class="p-2.5 font-mono"><span class="redact-label">[ SEARCH QUERY REDACTED ]</span></td>
+                                        <td class="p-2.5 text-amber-600 font-semibold">Moderate (Mentions tools)</td>
+                                        <td class="p-2.5"><span class="bg-amber-100 text-amber-800 px-2 py-0.5 rounded font-bold">Needs Proof</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="p-2.5 font-semibold text-slate-800">Transactional</td>
+                                        <td class="p-2.5 font-mono"><span class="redact-label">[ SEARCH QUERY REDACTED ]</span></td>
+                                        <td class="p-2.5 text-emerald-600 font-semibold">Strong (Immediate page)</td>
+                                        <td class="p-2.5"><span class="bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded font-bold">Frictionless</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="mt-4 p-3 bg-amber-50 border border-amber-200 rounded-md text-xs text-amber-900">
+                        <strong>Strategic Disconnect:</strong> High-intent scientists encounter a transactional paywall before their informational and credibility expectations are satisfied.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3: SECTION-BY-SECTION AUDIT -->
+        <section id="tab-page-audit" class="tab-content hidden space-y-6">
+            <!-- Intro Paragraph -->
+            <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div>
+                        <h2 class="text-xl font-bold text-slate-900 mb-1">16-Point Section-by-Section Audit Inspector</h2>
+                        <p class="text-slate-600 text-sm">Select any landing page element to inspect current state, friction score, and evidence-backed recommendations[cite: 1].</p>
+                    </div>
+                    <!-- Filter Controls -->
+                    <div class="flex items-center space-x-2">
+                        <span class="text-xs font-semibold text-slate-500">Filter:</span>
+                        <select id="audit-filter" onchange="filterAuditList()" class="bg-slate-100 text-slate-800 text-xs font-medium border border-slate-300 rounded-lg p-2 focus:ring-emerald-500">
+                            <option value="all">All 16 Elements</option>
+                            <option value="flaw">Critical Flaws Only</option>
+                            <option value="working">Working Elements Only</option>
+                            <option value="missing">Missing Trust Markers</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <!-- Audit Navigation List (Left Column) -->
+                <div class="lg:col-span-5 bg-white rounded-xl border border-slate-200 shadow-sm p-4 max-h-[550px] overflow-y-auto custom-scrollbar">
+                    <div class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Select Page Component</div>
+                    <div class="space-y-1.5" id="audit-list-container">
+                        <!-- JS injects list items -->
+                    </div>
+                </div>
+
+                <!-- Audit Inspection Card (Right Column) -->
+                <div class="lg:col-span-7 bg-white rounded-xl border border-slate-200 shadow-sm p-6 flex flex-col justify-between" id="audit-detail-pane">
+                    <!-- JS injects detailed audit view -->
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 4: COMPETITOR & ALTERNATIVE ANALYSIS -->
+        <section id="tab-competitors" class="tab-content hidden space-y-6">
+            <!-- Intro Paragraph -->
+            <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                <h2 class="text-xl font-bold text-slate-900 mb-2">Competitor & Alternative Landscape Matrix</h2>
+                <p class="text-slate-600 text-sm leading-relaxed">
+                    [ BRAND ] operates in a landscape dominated by academic bootcamps, virtual internships, traditional certificate providers, and algorithmic puzzle platforms. Below is a comparative evaluation revealing [ BRAND ]'s unique market moat[cite: 1].
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <!-- Radar Comparison Chart -->
+                <div class="lg:col-span-6 bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                    <h3 class="text-md font-bold text-slate-900 mb-1">Market Positioning Radar Comparison</h3>
+                    <p class="text-xs text-slate-500 mb-3">Comparing value dimensions across alternative platforms.</p>
+                    <div class="chart-container">
+                        <canvas id="competitorRadarChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Strategic Moat Summary -->
+                <div class="lg:col-span-6 bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-md font-bold text-slate-900 mb-3">Competitive Moats & Market Gaps</h3>
+                        <div class="space-y-3 text-xs">
+                            <div class="p-3 bg-slate-50 border border-slate-200 rounded-lg">
+                                <span class="font-bold text-slate-900">VS Competitor A:</span>
+                                <p class="text-slate-600 mt-1"><span class="redact-label">[ STRATEGIC COMPETITIVE DETAIL REDACTED ]</span></p>
+                            </div>
+                            <div class="p-3 bg-slate-50 border border-slate-200 rounded-lg">
+                                <span class="font-bold text-slate-900">VS Competitor B:</span>
+                                <p class="text-slate-600 mt-1"><span class="redact-label">[ STRATEGIC COMPETITIVE DETAIL REDACTED ]</span></p>
+                            </div>
+                            <div class="p-3 bg-slate-50 border border-slate-200 rounded-lg">
+                                <span class="font-bold text-slate-900">VS Traditional EdTech:</span>
+                                <p class="text-slate-600 mt-1"><span class="redact-label">[ STRATEGIC COMPETITIVE DETAIL REDACTED ]</span></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-4 p-3 bg-emerald-50 border border-emerald-200 rounded-md text-xs text-emerald-900 font-medium">
+                        <strong>Strategic Differentiation:</strong> <span class="redact-label">[ CONFIDENTIAL STRATEGY REDACTED ]</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Full Comparison Table -->
+            <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                <h3 class="text-md font-bold text-slate-900 mb-3">Comprehensive Platform Feature Matrix</h3>
+                <div class="overflow-x-auto custom-scrollbar">
+                    <table class="w-full text-left text-xs text-slate-600">
+                        <thead class="bg-slate-100 text-slate-700 font-bold uppercase tracking-wider">
+                            <tr>
+                                <th class="p-3">Platform</th>
+                                <th class="p-3">Core Positioning</th>
+                                <th class="p-3">Price Point</th>
+                                <th class="p-3">Practical Skill Focus</th>
+                                <th class="p-3">Portfolio Output</th>
+                                <th class="p-3">Strategic Advantage</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-200">
+                            <tr>
+                                <td class="p-3 font-bold text-slate-900">[ BRAND ] Blueprint</td>
+                                <td class="p-3">Career Accelerator & Portfolio Packaging</td>
+                                <td class="p-3 font-semibold text-emerald-600"><span class="redact-label">[ PRICING REDACTED ]</span></td>
+                                <td class="p-3">High</td>
+                                <td class="p-3 text-emerald-600 font-bold">Direct Primary Goal</td>
+                                <td class="p-3 text-slate-500">N/A (Target Subject)</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 font-bold text-slate-800">[ COMPETITOR A ]</td>
+                                <td class="p-3"><span class="redact-label">[ REDACTED ]</span></td>
+                                <td class="p-3 font-semibold text-slate-700"><span class="redact-label">[ REDACTED ]</span></td>
+                                <td class="p-3">Very High</td>
+                                <td class="p-3">Research Focus</td>
+                                <td class="p-3 text-emerald-700"><span class="redact-label">[ ADVANTAGE REDACTED ]</span></td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 font-bold text-slate-800">[ COMPETITOR B ]</td>
+                                <td class="p-3"><span class="redact-label">[ REDACTED ]</span></td>
+                                <td class="p-3 font-semibold text-slate-700"><span class="redact-label">[ REDACTED ]</span></td>
+                                <td class="p-3">High</td>
+                                <td class="p-3">Team Project Output</td>
+                                <td class="p-3 text-emerald-700"><span class="redact-label">[ ADVANTAGE REDACTED ]</span></td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 font-bold text-slate-800">Traditional EdTech</td>
+                                <td class="p-3">Diploma / Course Certification</td>
+                                <td class="p-3 font-semibold text-slate-700"><span class="redact-label">[ REDACTED ]</span></td>
+                                <td class="p-3 text-red-600 font-semibold"><span class="redact-label">[ BRAND-SENSITIVE ANALYSIS REDACTED ]</span></td>
+                                <td class="p-3 text-red-600 font-semibold"><span class="redact-label">[ BRAND-SENSITIVE ANALYSIS REDACTED ]</span></td>
+                                <td class="p-3 text-emerald-700"><span class="redact-label">[ ADVANTAGE REDACTED ]</span></td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 font-bold text-slate-800">[ COMPETITOR C ]</td>
+                                <td class="p-3"><span class="redact-label">[ REDACTED ]</span></td>
+                                <td class="p-3 font-semibold text-slate-700"><span class="redact-label">[ REDACTED ]</span></td>
+                                <td class="p-3">Moderate</td>
+                                <td class="p-3 text-red-600 font-semibold"><span class="redact-label">[ BRAND-SENSITIVE ANALYSIS REDACTED ]</span></td>
+                                <td class="p-3 text-emerald-700"><span class="redact-label">[ ADVANTAGE REDACTED ]</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 5: PROPOSED INFORMATION ARCHITECTURE & WIREFRAME -->
+        <section id="tab-proposed-ia" class="tab-content hidden space-y-6">
+            <!-- Intro Paragraph -->
+            <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div>
+                        <h2 class="text-xl font-bold text-slate-900 mb-1">Recommended Information Architecture & Prototype</h2>
+                        <p class="text-slate-600 text-sm">Compare the current single-column checkout layout against the proposed 7-section high-converting landing page IA.</p>
+                    </div>
+                    <!-- View Toggle -->
+                    <div class="flex bg-slate-100 p-1 rounded-lg border border-slate-300">
+                        <button onclick="toggleIAView('proposed')" id="btn-ia-proposed" class="px-3 py-1.5 text-xs font-bold rounded-md bg-white text-slate-900 shadow-sm">Proposed 7-Section IA</button>
+                        <button onclick="toggleIAView('current')" id="btn-ia-current" class="px-3 py-1.5 text-xs font-medium rounded-md text-slate-600 hover:text-slate-900">Current Checkout Page</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Proposed IA Interactive Layout Container -->
+            <div id="ia-proposed-view" class="space-y-6">
+                <!-- Section Flow Overview -->
+                <div class="bg-slate-900 text-white p-5 rounded-xl border border-slate-800 shadow-sm">
+                    <h3 class="text-sm font-bold text-emerald-400 uppercase tracking-wider mb-3">7-Step Psychological Conversion Journey</h3>
+                    <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2 text-center text-xs">
+                        <div class="bg-slate-800 p-2 rounded border border-slate-700">
+                            <div class="text-emerald-400 font-bold">1. Hero</div>
+                            <div class="text-slate-400 text-[10px] mt-1">Clarity & Proof</div>
+                        </div>
+                        <div class="bg-slate-800 p-2 rounded border border-slate-700">
+                            <div class="text-emerald-400 font-bold">2. Agitator</div>
+                            <div class="text-slate-400 text-[10px] mt-1">Cert Trap Pain</div>
+                        </div>
+                        <div class="bg-slate-800 p-2 rounded border border-slate-700">
+                            <div class="text-emerald-400 font-bold">3. Paradigm</div>
+                            <div class="text-slate-400 text-[10px] mt-1">Selection Ready</div>
+                        </div>
+                        <div class="bg-slate-800 p-2 rounded border border-slate-700">
+                            <div class="text-emerald-400 font-bold">4. Showcase</div>
+                            <div class="text-slate-400 text-[10px] mt-1">Blueprint Grid</div>
+                        </div>
+                        <div class="bg-slate-800 p-2 rounded border border-slate-700">
+                            <div class="text-emerald-400 font-bold">5. Authority</div>
+                            <div class="text-slate-400 text-[10px] mt-1">Founder + Community</div>
+                        </div>
+                        <div class="bg-slate-800 p-2 rounded border border-slate-700">
+                            <div class="text-emerald-400 font-bold">6. Filter</div>
+                            <div class="text-slate-400 text-[10px] mt-1">Who it's for/not</div>
+                        </div>
+                        <div class="bg-slate-800 p-2 rounded border border-slate-700">
+                            <div class="text-emerald-400 font-bold">7. Final CTA</div>
+                            <div class="text-slate-400 text-[10px] mt-1">Instant Access</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Wireframe Interactive Mockup Component -->
+                <div class="bg-white rounded-xl border border-slate-300 shadow-md overflow-hidden">
+                    <!-- Fake Browser Chrome -->
+                    <div class="bg-slate-100 px-4 py-2 border-b border-slate-200 flex items-center justify-between text-xs text-slate-500">
+                        <div class="flex space-x-1.5">
+                            <span class="w-3 h-3 rounded-full bg-red-400 block"></span>
+                            <span class="w-3 h-3 rounded-full bg-amber-400 block"></span>
+                            <span class="w-3 h-3 rounded-full bg-emerald-400 block"></span>
+                        </div>
+                        <div class="bg-white border border-slate-200 px-6 py-0.5 rounded text-slate-600 font-mono text-[11px]"><span class="redact-label">[ DOMAIN REDACTED ]</span>/portfolio-blueprint</div>
+                        <div>Interactive Strategy Preview</div>
+                    </div>
+
+                    <!-- Wireframe Page Body -->
+                    <div class="p-6 space-y-8 bg-slate-50">
+                        <!-- Hero Section Mockup -->
+                        <div class="bg-white p-6 rounded-lg border border-slate-200 shadow-sm flex flex-col md:flex-row items-center justify-between gap-6">
+                            <div class="md:w-7/12 space-y-3">
+                                <span class="bg-emerald-100 text-emerald-800 text-[11px] font-bold px-2.5 py-1 rounded-full uppercase">FOR BIOTECH & BIOINFORMATICS LEARNERS</span>
+                                <h1 class="text-xl sm:text-2xl font-extrabold text-slate-900 leading-tight">
+                                    Turn Your Bioinformatics Knowledge into an Industry-Ready Portfolio
+                                </h1>
+                                <p class="text-xs sm:text-sm text-slate-600">
+                                    Stop collecting theoretical certificates. Learn how to combine AI, biological data, and workflows to build a GitHub profile that gets noticed by industry recruiters.
+                                </p>
+                                <div class="pt-2 flex flex-wrap items-center gap-3">
+                                    <button class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-4 py-2 rounded text-xs shadow-sm">
+                                        Get the Blueprint →
+                                    </button>
+                                    <span class="text-xs text-slate-500 font-medium">✓ Instant PDF Download • Lifetime Access</span>
+                                </div>
+                            </div>
+                            <!-- Styled Terminal/Mockup Box -->
+                            <div class="md:w-5/12 w-full bg-slate-900 text-slate-200 p-4 rounded-lg font-mono text-xs shadow-inner border border-slate-700">
+                                <div class="text-slate-400 text-[10px] border-b border-slate-800 pb-1 mb-2">★ github.com/student/ngs-pipeline</div>
+                                <div class="text-emerald-400">$ nextflow run main.nf -profile docker</div>
+                                <div class="text-slate-400 mt-1">[OK] FASTQ Quality Control</div>
+                                <div class="text-slate-400">[OK] BWA Alignment to hg38</div>
+                                <div class="text-slate-400">[OK] GATK Variant Calling</div>
+                                <div class="text-emerald-400 mt-2">✔ Output: genomic_variants.vcf</div>
+                                <div class="text-amber-400 text-[10px] mt-2">Status: Selection-Ready Portfolio Asset</div>
+                            </div>
+                        </div>
+
+                        <!-- Section 2: Pain Point Agitator Mockup -->
+                        <div class="bg-slate-100 p-5 rounded-lg border border-slate-200">
+                            <div class="text-center max-w-xl mx-auto mb-4">
+                                <h2 class="text-md font-bold text-slate-900">Are You Stuck in the "Certification Trap"?</h2>
+                                <p class="text-xs text-slate-500">Why generic courses don't lead to dry-lab job offers.</p>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
+                                <div class="bg-white p-3 rounded border border-slate-200">
+                                    <div class="text-red-500 font-bold mb-1">❌ Irrelevant Tutorials</div>
+                                    <div class="text-slate-600">Building text calculators instead of parsing real genomic sequence files.</div>
+                                </div>
+                                <div class="bg-white p-3 rounded border border-slate-200">
+                                    <div class="text-red-500 font-bold mb-1">❌ Resume Screening Rejection</div>
+                                    <div class="text-slate-600">Submitting CVs packed with badges but zero verifiable GitHub links.</div>
+                                </div>
+                                <div class="bg-white p-3 rounded border border-slate-200">
+                                    <div class="text-red-500 font-bold mb-1">❌ Terminal Paralysis</div>
+                                    <div class="text-slate-600">Intimidated by modern workflow managers and Linux command line.</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Section 5: Founder Credibility & Community Social Proof Mockup -->
+                        <div class="bg-white p-5 rounded-lg border border-slate-200 flex flex-col md:flex-row items-center gap-5">
+                            <div class="w-16 h-16 rounded-full bg-slate-800 text-emerald-400 flex items-center justify-center text-xl font-bold flex-shrink-0">
+                                <span class="redact-label" style="font-size: 10px;">IMG</span>
+                            </div>
+                            <div class="space-y-1 text-xs text-slate-600">
+                                <div class="text-sm font-bold text-slate-900">Meet <span class="redact-label">[ FOUNDER NAME REDACTED ]</span></div>
+                                <p><span class="redact-label">[ FOUNDER DETAILS REDACTED ]</span></p>
+                                <div class="text-emerald-700 font-semibold pt-1">Community Proof: Creator of <span class="redact-label">[ COMMUNITY REDACTED ]</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Current IA View Container (Hidden by Default) -->
+            <div id="ia-current-view" class="hidden bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-4">
+                <div class="p-4 bg-red-50 border border-red-200 rounded-lg text-xs text-red-900">
+                    <strong class="text-sm font-bold">Current Checkout Page Structure Analysis:</strong>
+                    <ul class="list-disc ml-5 mt-2 space-y-1 text-red-800">
+                        <li>Subdomain: Hosted on <code class="bg-red-100 px-1 py-0.5 rounded"><span class="redact-label">[ CHECKOUT URL REDACTED ]</span></code>.</li>
+                        <li>Layout: Plain left-side text column + Right-side sticky payment checkout form.</li>
+                        <li>Missing Elements: No main site header, no navigation, no visual mockups, no founder credentials, no peer testimonials, no footer terms/privacy links.</li>
+                        <li>User Journey Impact: Traps the visitor in a immediate binary choice, causing high drop-offs among analytical scientists.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 6: ACTION PLAN & STRATEGY -->
+        <section id="tab-action-plan" class="tab-content hidden space-y-6">
+            <!-- Intro Paragraph -->
+            <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                <h2 class="text-xl font-bold text-slate-900 mb-1">Prioritized Action Plan & Developer Brief</h2>
+                <p class="text-slate-600 text-sm">Strategic implementation brief categorized by impact priority for design, copywriting, and web development teams[cite: 1].</p>
+            </div>
+
+            <!-- Priority Filter Controls -->
+            <div class="flex items-center space-x-2">
+                <span class="text-xs font-semibold text-slate-500">Filter Priority:</span>
+                <button onclick="filterTasks('all')" id="task-btn-all" class="task-filter-btn px-3 py-1 text-xs font-bold rounded-md bg-slate-900 text-white">All Tasks</button>
+                <button onclick="filterTasks('high')" id="task-btn-high" class="task-filter-btn px-3 py-1 text-xs font-semibold rounded-md bg-white border border-slate-300 text-slate-700 hover:bg-slate-100">High Priority</button>
+                <button onclick="filterTasks('med')" id="task-btn-med" class="task-filter-btn px-3 py-1 text-xs font-semibold rounded-md bg-white border border-slate-300 text-slate-700 hover:bg-slate-100">Medium Priority</button>
+                <button onclick="filterTasks('low')" id="task-btn-low" class="task-filter-btn px-3 py-1 text-xs font-semibold rounded-md bg-white border border-slate-300 text-slate-700 hover:bg-slate-100">Low Priority</button>
+            </div>
+
+            <!-- Task Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="task-grid-container">
+                <!-- JS injects prioritized task cards -->
+            </div>
+
+            <!-- Developer Brief Box -->
+            <div class="bg-slate-900 text-white p-6 rounded-xl border border-slate-800 shadow-sm space-y-4">
+                <h3 class="text-md font-bold text-emerald-400 uppercase tracking-wider">Designer & Developer Implementation Brief</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+                    <div class="bg-slate-800 p-4 rounded border border-slate-700">
+                        <div class="font-bold text-slate-200 mb-1">Domain & Architecture</div>
+                        <div class="text-slate-400">Deploy landing page on canonical root domain (<code class="text-emerald-400"><span class="redact-label">[ DOMAIN REDACTED ]</span></code>). Embed SDK directly into modal/drawer rather than redirecting away.</div>
+                    </div>
+                    <div class="bg-slate-800 p-4 rounded border border-slate-700">
+                        <div class="font-bold text-slate-200 mb-1">Visual Tone & Palette</div>
+                        <div class="text-slate-400">Clean, scientific, tech-forward. Grounded in Slate/White with Emerald (Biotech) accents and terminal code-block representations.</div>
+                    </div>
+                    <div class="bg-slate-800 p-4 rounded border border-slate-700">
+                        <div class="font-bold text-slate-200 mb-1">Technical SEO & Schema</div>
+                        <div class="text-slate-400">Add <code class="text-emerald-400">EducationalOccupationalProgram</code> Schema, OpenGraph cards, and optimize for <span class="redact-label">[ KEYWORD TARGET REDACTED ]</span>.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-slate-400 text-xs py-6 border-t border-slate-800 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div>
+                <span class="font-bold text-slate-200">[ BRAND ] Strategic Audit Dashboard</span> • Evidence-Based Landing Page Architecture
+            </div>
+            <div class="text-slate-500">
+                Data Sources: India BioEconomy Report (IBER) 2026, GenomeIndia, ISCB Competencies, <span class="redact-label">[ COMMUNITY PROOF REDACTED ]</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript Logic & Interactivity -->
+    <script>
+        // Data Structures
+        const segmentsData = {
+            'wet-lab': {
+                title: 'Segment 1: The Transitioning Wet-Lab Biologist',
+                identity: '[ SENSITIVE AUDIENCE RESEARCH REDACTED ]',
+                goals: 'Transition to computational biology without starting computer science from scratch.',
+                frustrations: '[ SENSITIVE RESEARCH DETAIL REDACTED ]',
+                trustSignals: 'Validation of their biological background; clear assurance that biology context is their greatest asset.',
+                knowledgeLevel: 'High Domain Biology Knowledge / Low Computational Infrastructure Knowledge'
+            },
+            'certificate': {
+                title: 'Segment 2: The "Certificate Collector" Graduate',
+                identity: 'Recent graduates who face constant job rejection.',
+                goals: 'Bypass standard ATS resume filters and land entry-level Bioinformatics Analyst roles ([ CAREER DATA REDACTED ]).',
+                frustrations: '[ SENSITIVE RESEARCH DETAIL REDACTED ]',
+                trustSignals: 'Real GitHub repo templates, proof of recruiter visibility, and concrete salary roadmap.',
+                knowledgeLevel: 'Moderate Theoretical Knowledge / Low Portfolio Execution'
+            },
+            'ai-curious': {
+                title: 'Segment 3: The AI-Curious Researcher',
+                identity: 'Early-career researchers wanting to integrate modern tools into multi-omics workflows.',
+                goals: 'Accelerate coding speed and automate pipeline writing.',
+                frustrations: '[ SENSITIVE RESEARCH DETAIL REDACTED ]',
+                trustSignals: 'Specific workflow examples combining LLMs with appropriate tech stacks.',
+                knowledgeLevel: 'Moderate Computational Knowledge / Eager for Modern AI Acceleration'
+            }
+        };
+
+        const auditItems = [
+            { id: 1, name: '1. Domain & URL Architecture', status: 'flaw', rating: 'Critical Flaw', text: 'Hosted on [ PRIVATE URL REDACTED ] subdomain. Destroys institutional trust, prevents SEO indexing, and feels transactional.' },
+            { id: 2, name: '2. Hero Headline', status: 'working', rating: 'Strong', text: 'Headline directly addresses the ISCB competency gap and core audience pain.' },
+            { id: 3, name: '3. Visual Mockups & Proof', status: 'flaw', rating: 'Critical Flaw', text: 'Zero images or mockups of the Blueprint document, GitHub structures, or terminal output. Product feels abstract.' },
+            { id: 4, name: '4. Founder Credibility', status: 'missing', rating: 'Missing Trust', text: '[ FOUNDER DETAILS REDACTED ]. Scientists require credentials before buying.' },
+            { id: 5, name: '5. Social Proof & Community', status: 'missing', rating: 'Missing Trust', text: 'No student testimonials, no mention of the active [ COMMUNITY REDACTED ], and no alumni placement logos.' },
+            { id: 6, name: '6. Pain Point Agitator Section', status: 'working', rating: 'Strong Copy', text: 'Accurately diagnoses the frustration of sending hundreds of resumes with standard online certificates.' },
+            { id: 7, name: '7. Technical Naming', status: 'flaw', rating: 'Needs Specificity', text: 'Uses generic terms like "projects" instead of naming essential tools like Git, Bash, and NGS analysis.' },
+            { id: 8, name: '8. Macro Economic Context', status: 'missing', rating: 'Missing Urgency', text: 'Fails to leverage the macroeconomic boom to build career urgency.' },
+            { id: 9, name: '9. Target Audience Callout', status: 'working', rating: 'Good Alignment', text: 'Explicitly specifies target learners and researchers, filtering unqualified leads.' },
+            { id: 10, name: '10. Pricing Strategy', status: 'working', rating: 'Well Priced', text: 'Psychological discount lowers financial barrier for students.' },
+            { id: 11, name: '11. Delivery Format Clarity', status: 'flaw', rating: 'Ambiguous', text: 'Unclear whether product is a PDF guide, video course, or live cohort. Increases pre-purchase anxiety.' },
+            { id: 12, name: '12. CTA Micro-copy & Trust', status: 'flaw', rating: 'Transactional', text: 'Button is overly transactional. Should be outcome-focused with security badges.' },
+            { id: 13, name: '13. Header & Navigation', status: 'missing', rating: 'Non-existent', text: 'Checkout template locks users in a binary buy/leave wall with no links to community or main site.' },
+            { id: 14, name: '14. AI Integration Context', status: 'working', rating: 'Good Angle', text: 'Mentions combining AI + domain tech, tapping into strong search intent for AI coding assistants.' },
+            { id: 15, name: '15. Footer & Legal Disclaimers', status: 'missing', rating: 'Missing Trust', text: 'No privacy policy, refund policy, or contact support email visible on the main page canvas.' },
+            { id: 16, name: '16. Mobile Layout Responsiveness', status: 'working', rating: 'Functional', text: 'Template is mobile-responsive, but text density causes fatigue on small screens.' }
+        ];
+
+        const taskData = [
+            { id: 't1', priority: 'high', title: '1. Deploy Standalone Web Domain', issue: 'Hosted on checkout subdomain.', change: 'Migrate landing page to canonical domain with custom header & footer.', benefit: 'Establishes institutional credibility and enables organic Google SEO indexing.' },
+            { id: 't2', priority: 'high', title: '2. Add Visual Digital Product Mockups', issue: 'Text-only presentation makes product feel intangible.', change: 'Design high-fidelity preview graphics of the PDF guide, GitHub templates, and terminal execution.', benefit: 'Increases perceived material value and reduces pre-purchase friction.' },
+            { id: 't3', priority: 'high', title: '3. Inject Founder Bio & Scientific Proof', issue: 'Author anonymity breeds skepticism among analytical scientists.', change: 'Add "Meet the Founder" section detailing credentials and community stats.', benefit: 'Builds immediate domain authority and peer trust.' },
+            { id: 't4', priority: 'med', title: '4. Contextualize Demand', issue: 'Operates in a vacuum without macro urgency.', change: 'Highlight industry macroeconomic growth and hiring trends.', benefit: 'Creates "Why Now?" urgency for students to build portfolios immediately.' },
+            { id: 't5', priority: 'med', title: '5. Refine Technical Tooling Language', issue: 'Generic phrasing like "coding projects".', change: 'Explicitly reference specific domain tools and pipelines.', benefit: 'Signals deep domain expertise to recruiters and technical applicants.' },
+            { id: 't6', priority: 'low', title: '6. Outcome-Based CTA Button Optimization', issue: 'Button text reads overly transactional.', change: 'Update to "Get Instant Access to Blueprint" paired with 100% Secure Payment badges.', benefit: 'Shifts user focus from spending money to acquiring high-value career assets.' }
+        ];
+
+        // Global Chart References
+        let bioChartRef = null;
+        let iscbRadarRef = null;
+        let compRadarRef = null;
+
+        // Tab Switching Logic
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('bg-emerald-700', 'text-white');
+                btn.classList.add('text-slate-300', 'hover:text-white', 'hover:bg-slate-800');
+            });
+
+            document.getElementById('tab-' + tabId).classList.remove('hidden');
+            const activeBtn = document.getElementById('nav-' + tabId);
+            if(activeBtn) {
+                activeBtn.classList.add('bg-emerald-700', 'text-white');
+                activeBtn.classList.remove('text-slate-300', 'hover:bg-slate-800');
+            }
+
+            // Re-render charts when visible to prevent layout squishing
+            if(tabId === 'exec-summary' && bioChartRef) bioChartRef.resize();
+            if(tabId === 'audience-intent' && iscbRadarRef) iscbRadarRef.resize();
+            if(tabId === 'competitors' && compRadarRef) compRadarRef.resize();
+        }
+
+        // Mobile Menu Toggle
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        // Segment Display Logic
+        function showSegment(segKey) {
+            const seg = segmentsData[segKey];
+            document.querySelectorAll('.segment-btn').forEach(btn => {
+                btn.classList.remove('bg-emerald-600', 'text-white');
+                btn.classList.add('bg-white', 'text-slate-700', 'border', 'border-slate-300');
+            });
+            const activeBtn = document.getElementById('btn-seg-' + segKey);
+            activeBtn.classList.add('bg-emerald-600', 'text-white');
+            activeBtn.classList.remove('bg-white', 'text-slate-700', 'border', 'border-slate-300');
+
+            document.getElementById('segment-display-area').innerHTML = `
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between border-b border-slate-200 pb-2">
+                        <h3 class="text-lg font-bold text-slate-900">${seg.title}</h3>
+                        <span class="text-xs bg-emerald-100 text-emerald-800 font-semibold px-2.5 py-1 rounded-full">${seg.knowledgeLevel}</span>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+                        <div class="p-3 bg-slate-50 rounded border border-slate-200">
+                            <strong class="text-slate-900 block mb-1">Target Persona Identity:</strong>
+                            <p class="text-slate-600">${seg.identity}</p>
+                        </div>
+                        <div class="p-3 bg-slate-50 rounded border border-slate-200">
+                            <strong class="text-slate-900 block mb-1">Primary Career Goal:</strong>
+                            <p class="text-slate-600">${seg.goals}</p>
+                        </div>
+                        <div class="p-3 bg-red-50 rounded border border-red-200">
+                            <strong class="text-red-900 block mb-1">Common Frustrations:</strong>
+                            <p class="text-red-800">${seg.frustrations}</p>
+                        </div>
+                        <div class="p-3 bg-emerald-50 rounded border border-emerald-200">
+                            <strong class="text-emerald-900 block mb-1">Critical Trust Signals Needed:</strong>
+                            <p class="text-emerald-800">${seg.trustSignals}</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Section Audit Filter & Render Logic
+        function renderAuditList(filter = 'all') {
+            const container = document.getElementById('audit-list-container');
+            container.innerHTML = '';
+            
+            const filtered = auditItems.filter(item => {
+                if(filter === 'all') return true;
+                return item.status === filter;
+            });
+
+            filtered.forEach((item, index) => {
+                const badgeColor = item.status === 'flaw' ? 'bg-red-100 text-red-800' :
+                                 item.status === 'working' ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800';
+                
+                const div = document.createElement('div');
+                div.className = `p-3 rounded-lg border cursor-pointer transition flex items-center justify-between text-xs hover:bg-slate-50 ${index === 0 ? 'border-emerald-500 bg-emerald-50/30' : 'border-slate-200'}`;
+                div.onclick = () => selectAuditItem(item.id, div);
+                div.innerHTML = `
+                    <span class="font-medium text-slate-800">${item.name}</span>
+                    <span class="text-[10px] font-bold px-2 py-0.5 rounded ${badgeColor}">${item.rating}</span>
+                `;
+                container.appendChild(div);
+            });
+
+            if(filtered.length > 0) {
+                selectAuditItem(filtered[0].id);
+            } else {
+                document.getElementById('audit-detail-pane').innerHTML = '<div class="text-slate-500 text-xs">No audit items match this filter.</div>';
+            }
+        }
+
+        function selectAuditItem(id, clickedEl) {
+            if(clickedEl) {
+                document.querySelectorAll('#audit-list-container > div').forEach(el => el.classList.remove('border-emerald-500', 'bg-emerald-50/30'));
+                clickedEl.classList.add('border-emerald-500', 'bg-emerald-50/30');
+            }
+
+            const item = auditItems.find(i => i.id === id);
+            const pane = document.getElementById('audit-detail-pane');
+            
+            const badgeColor = item.status === 'flaw' ? 'bg-red-100 text-red-800' :
+                             item.status === 'working' ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800';
+
+            pane.innerHTML = `
+                <div>
+                    <div class="flex items-center justify-between border-b border-slate-200 pb-3 mb-4">
+                        <h3 class="text-lg font-bold text-slate-900">${item.name}</h3>
+                        <span class="text-xs font-bold px-2.5 py-1 rounded-full ${badgeColor}">${item.rating}</span>
+                    </div>
+                    <div class="space-y-4 text-xs sm:text-sm">
+                        <div class="p-4 bg-slate-50 rounded-lg border border-slate-200">
+                            <strong class="text-slate-900 block mb-1">Current State & Criticism:</strong>
+                            <p class="text-slate-700 leading-relaxed">${item.text}</p>
+                        </div>
+                        <div class="p-4 bg-emerald-50 rounded-lg border border-emerald-200">
+                            <strong class="text-emerald-900 block mb-1">Strategic Recommendation:</strong>
+                            <p class="text-emerald-800 leading-relaxed">Redesign this component on canonical domain with explicit scientific proof, proper visual hierarchy, and outcome-oriented copy.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-6 pt-3 border-t border-slate-200 flex justify-between items-center text-xs text-slate-500">
+                    <span>Audit Framework Ref: Brand-16P</span>
+                    <span>Target Audience: Domain Learners</span>
+                </div>
+            `;
+        }
+
+        function filterAuditList() {
+            const val = document.getElementById('audit-filter').value;
+            renderAuditList(val);
+        }
+
+        // Toggle Information Architecture View
+        function toggleIAView(view) {
+            const proposedView = document.getElementById('ia-proposed-view');
+            const currentView = document.getElementById('ia-current-view');
+            const btnProposed = document.getElementById('btn-ia-proposed');
+            const btnCurrent = document.getElementById('btn-ia-current');
+
+            if(view === 'proposed') {
+                proposedView.classList.remove('hidden');
+                currentView.classList.add('hidden');
+                btnProposed.className = "px-3 py-1.5 text-xs font-bold rounded-md bg-white text-slate-900 shadow-sm";
+                btnCurrent.className = "px-3 py-1.5 text-xs font-medium rounded-md text-slate-600 hover:text-slate-900";
+            } else {
+                proposedView.classList.add('hidden');
+                currentView.classList.remove('hidden');
+                btnCurrent.className = "px-3 py-1.5 text-xs font-bold rounded-md bg-white text-slate-900 shadow-sm";
+                btnProposed.className = "px-3 py-1.5 text-xs font-medium rounded-md text-slate-600 hover:text-slate-900";
+            }
+        }
+
+        // Filter Tasks
+        function renderTasks(filter = 'all') {
+            const container = document.getElementById('task-grid-container');
+            container.innerHTML = '';
+
+            const filtered = taskData.filter(t => filter === 'all' || t.priority === filter);
+
+            filtered.forEach(task => {
+                const pColor = task.priority === 'high' ? 'border-l-red-500 bg-red-50/20' :
+                              task.priority === 'med' ? 'border-l-amber-500 bg-amber-50/20' : 'border-l-sky-500 bg-sky-50/20';
+                const pTag = task.priority === 'high' ? 'bg-red-100 text-red-800' :
+                            task.priority === 'med' ? 'bg-amber-100 text-amber-800' : 'bg-sky-100 text-sky-800';
+
+                const card = document.createElement('div');
+                card.className = `bg-white p-4 rounded-xl border border-slate-200 border-l-4 ${pColor} shadow-sm space-y-2 text-xs`;
+                card.innerHTML = `
+                    <div class="flex items-center justify-between">
+                        <span class="font-bold text-slate-900 text-sm">${task.title}</span>
+                        <span class="text-[10px] font-bold px-2 py-0.5 rounded uppercase ${pTag}">${task.priority} priority</span>
+                    </div>
+                    <div><strong class="text-slate-700">Issue:</strong> <span class="text-slate-600">${task.issue}</span></div>
+                    <div><strong class="text-slate-700">Recommended Change:</strong> <span class="text-slate-600">${task.change}</span></div>
+                    <div class="p-2 bg-slate-50 rounded border border-slate-200 text-emerald-800 font-medium">
+                        <strong>Expected Strategic Benefit:</strong> ${task.benefit}
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function filterTasks(prio) {
+            document.querySelectorAll('.task-filter-btn').forEach(btn => {
+                btn.classList.remove('bg-slate-900', 'text-white');
+                btn.classList.add('bg-white', 'text-slate-700', 'border', 'border-slate-300');
+            });
+            const activeBtn = document.getElementById('task-btn-' + prio);
+            activeBtn.classList.add('bg-slate-900', 'text-white');
+            activeBtn.classList.remove('bg-white', 'text-slate-700', 'border', 'border-slate-300');
+            renderTasks(prio);
+        }
+
+        // Chart Initialization
+        function initCharts() {
+            // Chart 1: Bioeconomy Growth
+            const ctxBio = document.getElementById('bioeconomyChart').getContext('2d');
+            bioChartRef = new Chart(ctxBio, {
+                type: 'line',
+                data: {
+                    labels: ['2021', '2022', '2023', '2024', '2025', '2026 (Target)'],
+                    datasets: [
+                        {
+                            label: 'Indian Bioeconomy Valuation ($ Billion)',
+                            data: [80.2, 110.5, 137.2, 165.0, 195.3, 300.0],
+                            borderColor: '#16a34a',
+                            backgroundColor: 'rgba(22, 163, 74, 0.1)',
+                            fill: true,
+                            tension: 0.3,
+                            borderWidth: 3
+                        },
+                        {
+                            label: 'Bioinformatics Job Postings Index',
+                            data: [35, 48, 62, 78, 100, 145],
+                            borderColor: '#0284c7',
+                            borderDash: [5, 5],
+                            borderWidth: 2,
+                            pointRadius: 3
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'top', labels: { boxWidth: 12, font: { size: 11 } } },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.dataset.label + ': ' + context.raw;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: { grid: { color: '#f1f5f9' }, ticks: { font: { size: 10 } } },
+                        x: { grid: { color: '#f1f5f9' }, ticks: { font: { size: 10 } } }
+                    }
+                }
+            });
+
+            // Chart 2: ISCB Radar Chart
+            const ctxISCB = document.getElementById('iscbRadarChart').getContext('2d');
+            iscbRadarRef = new Chart(ctxISCB, {
+                type: 'radar',
+                data: {
+                    labels: [
+                        'Biology Domain Knowledge',
+                        'Basic Scripting (Python/R)',
+                        'GitHub & Version Control',
+                        'NGS Pipeline Mgmt',
+                        'AI & LLM Integration',
+                        'Recruiter Portfolio Visibility'
+                    ],
+                    datasets: [
+                        {
+                            label: 'Average Graduate Baseline',
+                            data: [85, 40, 15, 10, 25, 20],
+                            borderColor: '#ef4444',
+                            backgroundColor: 'rgba(239, 68, 68, 0.2)',
+                            borderWidth: 2
+                        },
+                        {
+                            label: 'Industry Hiring Standard',
+                            data: [75, 75, 80, 85, 70, 90],
+                            borderColor: '#16a34a',
+                            backgroundColor: 'rgba(22, 163, 74, 0.2)',
+                            borderWidth: 2
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 10 } } }
+                    },
+                    scales: {
+                        r: {
+                            angleLines: { color: '#e2e8f0' },
+                            grid: { color: '#e2e8f0' },
+                            suggestedMin: 0,
+                            suggestedMax: 100,
+                            ticks: { display: false }
+                        }
+                    }
+                }
+            });
+
+            // Chart 3: Competitor Radar
+            const ctxComp = document.getElementById('competitorRadarChart').getContext('2d');
+            compRadarRef = new Chart(ctxComp, {
+                type: 'radar',
+                data: {
+                    labels: [
+                        'Practical Portfolio Focus',
+                        'Price Accessibility',
+                        'Asynchronous Speed',
+                        'Hiring Alignment',
+                        'Modern AI Workflow'
+                    ],
+                    datasets: [
+                        {
+                            label: 'Brand Blueprint',
+                            data: [95, 90, 95, 95, 90],
+                            borderColor: '#16a34a',
+                            backgroundColor: 'rgba(22, 163, 74, 0.2)',
+                            borderWidth: 2
+                        },
+                        {
+                            label: 'Competitor A',
+                            data: [85, 30, 60, 60, 70],
+                            borderColor: '#0284c7',
+                            backgroundColor: 'rgba(2, 132, 199, 0.1)',
+                            borderWidth: 1.5
+                        },
+                        {
+                            label: 'Traditional EdTech',
+                            data: [20, 50, 70, 40, 20],
+                            borderColor: '#94a3b8',
+                            backgroundColor: 'rgba(148, 163, 184, 0.1)',
+                            borderWidth: 1.5
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 10 } } }
+                    },
+                    scales: {
+                        r: {
+                            angleLines: { color: '#e2e8f0' },
+                            grid: { color: '#e2e8f0' },
+                            suggestedMin: 0,
+                            suggestedMax: 100,
+                            ticks: { display: false }
+                        }
+                    }
+                }
+            });
+        }
+
+        // DOM Ready Initializer
+        document.addEventListener('DOMContentLoaded', () => {
+            showSegment('wet-lab');
+            renderAuditList('all');
+            renderTasks('all');
+            initCharts();
+        });
+    </script>
+</body>
+</html>
