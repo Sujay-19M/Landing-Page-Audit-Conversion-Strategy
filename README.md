@@ -246,7 +246,7 @@ No confidential client information is intended to be disclosed through this repo
 
 ## Built For
 
-**Portfolio:** Upwork  
+**Portfolio:** Brand Landing Page Audit & Conversion Strategy
 **Project Type:** Landing Page Audit / UX & Conversion Strategy  
 **Subject:** BTGenZ  
 **Primary Work:** Audience Research, UX Audit, Information Architecture, Content Strategy, Conversion Strategy  
